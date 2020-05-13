@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom';
 function RenderLeader({ leader }) {
     return (
         <div className='row'>
-            <Media className='mt-5'>
+            <Media className='mt-5' tag='li'>
                 <Media left className='mr-5'>
                     <Media object src={leader.image} alt='Generic Placeholder Image' />
                 </Media>
                 <Media body>
                     <Media Heading> <h5>{leader.name}</h5></Media>
-                    <Media>{leader.designation}</Media>
-                    <Media>{leader.description}</Media>
+                    <p>{leader.designation}</p>
+                    <p>{leader.description}</p>
                 </Media>
             </Media>
         </div>
