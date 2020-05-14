@@ -49,7 +49,7 @@ class Contact extends Component {
 
     handleBlur = (field) => (evt) => {
         this.setState({
-            touched: { ...this.state.touched, [field]: true }
+            touched: { ...this.state.touched, [field]: true } // sets everything in touched to true
         });
     }
 
