@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem,Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
+import { Card, CardImg, CardText, CardBody, CardTitle, Breadcrumb, BreadcrumbItem, Modal, ModalHeader, ModalBody, Label, Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
 
 const maxLength = (len) => (val) => !(val) || (val.length <= len);
 const minLength = (len) => (val) => val && (val.length >= len);
 
-class Comment extends Component {
+class CommentForm extends Component {
 
     constructor(props) {
         super(props);
@@ -15,11 +15,12 @@ class Comment extends Component {
             isModalopen: false
         };
         this.toggleModal = this.toggleModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleSubmit(values) {
-        console.log('Current state is ' + JSON.stringify(values));
-        alert('Current State is: ' + JSON.stringify(values));
+        this.toggleModal();
+        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
     }
 
     toggleModal() {
@@ -46,19 +47,23 @@ class Comment extends Component {
                                 <Label htmlFor='rating' md={10}>Rating</Label>
                                 <Col md={10}>
                                     <Control.select model='.rating' className='form-control'>
-                                        <option>1</option>
-                                        <option>2</option> <option>3</option><option>4</option><option>5</option></Control.select>
+                                        <option value='1'>1</option>
+                                        <option value='2'>2</option>
+                                        <option value='3'>3</option>
+                                        <option value='4'>4</option>
+                                        <option value='5'>5</option>
+                                    </Control.select>
                                 </Col>
                             </Row>
                             <Row className='form-group'>
-                                <Label htmlFor='name' md={10}>Your Name</Label>
+                                <Label htmlFor='author' md={10}>Your Name</Label>
                                 <Col md={10}>
-                                    <Control.text model='.name' className='form-control' placeholder='Your Name'
+                                    <Control.text model='.author' className='form-control' placeholder='Your Name'
                                         validators={{
                                             minLength: minLength(3), maxLength: maxLength(15)
                                         }} />
                                     <Errors className='text-danger'
-                                        model='.name'
+                                        model='.author'
                                         show='touched'
                                         messages={{
                                             minLength: ' Must be greater than 2 characters.',
@@ -105,7 +110,7 @@ function RenderDish({ dish }) {
     }
 }
 
-function RenderComments({ comments }) {
+function RenderComments({ comments, addComment, dishId }) {
     var commentList = comments.map(comment => {
         return (
             <li key={comment.id}>
@@ -119,7 +124,7 @@ function RenderComments({ comments }) {
         <div>
             <h4>Comments</h4>
             <ul className='list-unstyled'>{commentList}</ul>
-            <Comment/>
+            <CommentForm dishId={dishId} addComment={addComment} />
         </div>
     );
 
@@ -144,7 +149,9 @@ const DishDetail = (props) => {
                         <RenderDish dish={props.dish} />
                     </div>
                     <div className="col-12 col-md-5 m-1">
-                        <RenderComments comments={props.comments} />
+                        <RenderComments comments={props.comments}
+                            addComment={props.addComment}
+                            dishId={props.dish.id} />
                     </div>
                 </div>
             </div>

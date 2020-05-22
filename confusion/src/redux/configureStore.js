@@ -5,14 +5,14 @@ import { Leaders } from './leaders';
 import { Promotions } from './promotions';
 
 
-export const configureStore = () => {
+export const ConfigureStore = () => {
 
     const store = createStore(
        combineReducers({
            dishes:Dishes,
            comments:Comments,
+           promotions:Promotions,
            leaders:Leaders,
-           promotions:Promotions
        })
     );
 
